@@ -19,7 +19,7 @@ export const CommandExecutor = {
     const todoList = TodoList.getInstance();
     switch (command.name) {
       case Commands.ADD:
-        const todoInput = globalThis.DOM.todoInput;
+        const todoInput = DOM.todoInput;
         const todoText = todoInput.value.trim();
 
         if (todoText !== "") {

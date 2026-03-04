@@ -28,7 +28,7 @@
             <li><a class="nav__link" href="#contact">Elemento 4</a></li>
           </ul>
         </nav>
-      </header>
+      </header> 
 
       <main id="container" class="main">
         <div class="container">
@@ -36,6 +36,12 @@
           <input type="text" id="todo-input" placeholder="Add a new task" />
           <button id="add-btn">Add</button>
           <ul id="todo-list" class="todo-list"></ul>
+            <template id="todo-template">
+              <li class="todo-item">
+                <span class="todo-text"></span>
+                <button class="delete-btn">Delete</button>
+              </li>
+            </template>
         </div>
       </main>
 
