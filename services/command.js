@@ -1,4 +1,5 @@
 import { TodoItem, TodoList } from "./todoList.js";
+import { TodoHistory } from "./memento.js";
 
 export class Command {
   name;
@@ -12,6 +13,7 @@ export class Command {
 export const Commands = {
   ADD: "add",
   DELETE: "delete",
+  UNDO: "undo"
 };
 
 export const CommandExecutor = {
@@ -28,7 +30,13 @@ export const CommandExecutor = {
         }
         break;
       case Commands.DELETE:
+        //"Toma el primer elemento del array command.args y guárdalo en la variable textTodo."
+        const [textTodo] = command.args;
+        todoList.delete(command.args);
         break;
+      case Commands.UNDO:
+        const goBack = TodoHistory.pop();
+        todoList.replaceList(goBack);
     }
   },
 };

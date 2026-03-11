@@ -4,14 +4,15 @@ import { TodoList } from "./services/todoList.js";
 globalThis.DOM = {};
 
 const DOM = globalThis.DOM;
+const todoList = TodoList.getInstance();
 
 document.addEventListener("DOMContentLoaded", () => {
+
   DOM.todoList = document.getElementById("todo-list");
   DOM.addBtn = document.getElementById("add-btn");
   DOM.todoInput = document.getElementById("todo-input");
 
-  const todoList = TodoList.getInstance();
-  todoList.addObserver(render);
+  todoList.addObserver(renderNewItem);
 
   DOM.addBtn.addEventListener("click", () => {
     //En JavaScript, si no pasas un argumento, su valor es undefined.
@@ -21,12 +22,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   DOM.todoList.addEventListener("click", (event) => {
     if (event.target.classList.contains("delete-btn")) {
+      const todoItem = event.target.closest(".todo-item").dataset.text;
+      const cmd = new Command(Commands.DELETE, [todoItem]);
+      CommandExecutor.execute(cmd);
     }
   });
+
 });
 
-function render() {
-  const todoList = TodoList.getInstance();
+document.addEventListener("keydown", function (event) {
+  if(event.ctrlKey && event.key === "p") {
+    event.preventDefault();
+    const cmd = new Command(Commands.ADD);
+    CommandExecutor.execute(cmd);
+  }
+
+  if(event.ctrlKey && event.key === "z") {
+    event.preventDefault;
+    const cmd = new Command(Commands.UNDO);
+    CommandExecutor.execute(cmd);
+  }
+})
+
+function renderNewItem() {
   const template = document.getElementById("todo-template");
 
   //limpiar lista
@@ -42,11 +60,15 @@ function render() {
     //que en este caso seria todo-item
     //Si no estuviera todo-item, no usar firstElementChild
     //de lo contrario me devolveria solo todo-text
-    const element = template.content.cloneNode(true).firstElementChild;
+    const todoItem = template.content.cloneNode(true).firstElementChild;
 
     //simplemente insertar texto en todo-text
-    element.querySelector(".todo-text").textContent = item.text
+    todoItem.querySelector(".todo-text").textContent = item.text
+
+    //Automáticamente, el navegador genera (o actualiza) 
+    //un atributo llamado data-text en la etiqueta de ese elemento.
+    todoItem.dataset.text = item.text;
     
-    DOM.todoList.appendChild(element);
+    DOM.todoList.appendChild(todoItem);
   });
 }
