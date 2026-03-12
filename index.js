@@ -11,8 +11,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function createCardElement(title, body) {
-    // use the create card element from prev examples
+    const template = document.getElementById("card-template");
+    const element = template.content.cloneNode(true).firstElementChild;
+    const title_ = element.querySelector(".card__title");
+    const body_ = element.querySelector(".card__body__content");
+
+    title_.textContent = title;
+    body_.textContent = body;
+    return element;
   }
+
+  const observer = new IntersectionObserver((entry) => {
+    if(entry.isIntersecting) {
+      const fragment = document.createDocumentFragment();
+      fragment.appendChild(db.next());
+      
+    }
+  })
 
   /**
    * Exercise - Intersection Observer
